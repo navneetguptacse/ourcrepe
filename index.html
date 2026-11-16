@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <title>ourcrepe — Fast Tools for Modern Coders</title>
+        <meta
+            name="description"
+            content="ourcrepe builds ultra-fast, minimal developer tools and AI-augmented editors for builders and competitive coders."
+        />
+        <!-- Favicons & Tab Icons -->
+        <link rel="icon" type="image/x-icon" href="favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="images/logo.ico" />
+        <link rel="shortcut icon" href="images/logo.ico" />
+        <link rel="icon" type="image/png" href="images/logo.png" />
+        <link rel="apple-touch-icon" href="images/logo.png" />
+        <!-- Google Fonts -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Pinyon+Script&display=swap"
+            rel="stylesheet"
+        />
+        <!-- Font Awesome Icons -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+            integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+        <style>
+            :root {
+                --blue: #3178c6;
+                --blue-d: #235a97;
+                --bg: #fff;
+                --soft: #eef4fb;
+                --ink: #0f2744;
+                --mut: #5b6f87;
+                --line: #d9e5f3;
+                --card: #fff;
+                --code: #0f2744;
+                --codeink: #dbe9fb;
+                --badge-live: #059669;
+                --badge-live-bg: #ecfdf5;
+                --badge-up: #d97706;
+                --badge-up-bg: #fffbeb;
+                box-sizing: border-box;
+                padding-top: env(safe-area-inset-top, 0px);
+                padding-bottom: env(safe-area-inset-bottom, 0px);
+            }
+            @media (prefers-color-scheme: dark) {
+                :root:not([data-theme="light"]) {
+                    --bg: #0a1626;
+                    --soft: #0e1f36;
+                    --ink: #eaf2fc;
+                    --mut: #98acc4;
+                    --line: #1d3452;
+                    --card: #102440;
+                    --code: #06101e;
+                    --blue: #4a90e2;
+                    --blue-d: #357abd;
+                    --badge-live: #34d399;
+                    --badge-live-bg: #064e3b40;
+                    --badge-up: #fbbf24;
+                    --badge-up-bg: #78350f40;
+                }
+            }
+            :root[data-theme="dark"] {
+                --bg: #0a1626;
+                --soft: #0e1f36;
+                --ink: #eaf2fc;
+                --mut: #98acc4;
+                --line: #1d3452;
+                --card: #102440;
+                --code: #06101e;
+                --blue: #4a90e2;
+                --blue-d: #357abd;
+                --badge-live: #34d399;
+                --badge-live-bg: #064e3b40;
+                --badge-up: #fbbf24;
+                --badge-up-bg: #78350f40;
+            }
+            :root[data-theme="light"] {
+                --blue: #3178c6;
+                --blue-d: #235a97;
+                --bg: #fff;
+                --soft: #eef4fb;
+                --ink: #0f2744;
+                --mut: #5b6f87;
+                --line: #d9e5f3;
+                --card: #fff;
+                --code: #0f2744;
+                --codeink: #dbe9fb;
+                --badge-live: #059669;
+                --badge-live-bg: #ecfdf5;
+                --badge-up: #d97706;
+                --badge-up-bg: #fffbeb;
+            }
+            * {
+                box-sizing: border-box;
+            }
+            html {
+                scroll-behavior: smooth;
+                scroll-padding-top: env(safe-area-inset-top, 0px);
+            }
+            body {
+                margin: 0;
+                background: var(--bg);
+                color: var(--ink);
+                font:
+                    16px/1.6 Inter,
+                    system-ui,
+                    sans-serif;
+                transition: background 0.2s, color 0.2s;
+            }
+            a {
+                color: inherit;
+                text-decoration: none;
+            }
+            .wrap {
+                max-width: 1040px;
+                margin: 0 auto;
+                padding: 0 22px;
+            }
+            .script {
+                font-family: "Pinyon Script", cursive;
+                font-weight: 400;
+                color: var(--blue);
+            }
+            nav {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 22px 0;
+            }
+            .brand {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                font-weight: 700;
+                font-size: 19px;
+                letter-spacing: -0.01em;
+            }
+            .brand img {
+                width: 32px;
+                height: 32px;
+                object-fit: contain;
+                display: block;
+            }
+            .logo {
+                width: 104px;
+                height: 104px;
+                object-fit: contain;
+                margin: 0 auto 12px;
+                display: inline-block;
+                animation: float 5s ease-in-out infinite;
+                filter: drop-shadow(0 12px 24px color-mix(in srgb, var(--blue) 25%, transparent));
+            }
+            @keyframes float {
+                0%, 100% {
+                    transform: translateY(0px);
+                }
+                50% {
+                    transform: translateY(-8px);
+                }
+            }
+            nav .links {
+                display: flex;
+                align-items: center;
+                gap: 24px;
+                font-size: 14px;
+                color: var(--mut);
+            }
+            nav .links a:hover {
+                color: var(--blue);
+            }
+            .theme-btn {
+                background: var(--soft);
+                border: 1px solid var(--line);
+                color: var(--ink);
+                border-radius: 8px;
+                padding: 6px 11px;
+                font-size: 13px;
+                cursor: pointer;
+                transition: 0.2s;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .theme-btn:hover {
+                border-color: var(--blue);
+            }
+            .hero {
+                text-align: center;
+                padding: 56px 0 76px;
+                position: relative;
+            }
+            .hero::before {
+                content: "";
+                position: absolute;
+                inset: -40px 0 auto;
+                height: 420px;
+                background: radial-gradient(
+                    ellipse at 50% 0,
+                    color-mix(in srgb, var(--blue) 20%, transparent),
+                    transparent 70%
+                );
+                z-index: -1;
+            }
+            .hero .script {
+                font-size: clamp(34px, 6vw, 54px);
+                display: block;
+                margin-top: 10px;
+                line-height: 1;
+            }
+            h1 {
+                font-size: clamp(36px, 6.8vw, 64px);
+                line-height: 1.08;
+                letter-spacing: -0.03em;
+                margin: 8px 0 18px;
+            }
+            h1 em {
+                font-style: normal;
+                color: var(--blue);
+            }
+            .lead {
+                max-width: 580px;
+                margin: 0 auto 32px;
+                color: var(--mut);
+                font-size: 18px;
+            }
+            .cta {
+                display: flex;
+                gap: 12px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .btn {
+                padding: 13px 24px;
+                border-radius: 12px;
+                font-weight: 600;
+                font-size: 15px;
+                border: 1px solid var(--blue);
+                transition: 0.2s;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .btn.p {
+                background: var(--blue);
+                color: #fff;
+            }
+            .btn.p:hover {
+                background: var(--blue-d);
+                transform: translateY(-2px);
+            }
+            .btn.s {
+                background: transparent;
+                color: var(--blue);
+            }
+            .btn.s:hover {
+                background: var(--soft);
+                transform: translateY(-2px);
+            }
+            .keys {
+                margin-top: 32px;
+                color: var(--mut);
+                font-size: 14px;
+            }
+            kbd {
+                font:
+                    500 13px "JetBrains Mono",
+                    monospace;
+                background: var(--card);
+                border: 1px solid var(--line);
+                border-bottom-width: 3px;
+                border-radius: 7px;
+                padding: 3px 8px;
+                color: var(--ink);
+            }
+            .marq {
+                overflow: hidden;
+                background: var(--blue);
+                color: #fff;
+                padding: 14px 0;
+                white-space: nowrap;
+                font:
+                    500 14px "JetBrains Mono",
+                    monospace;
+            }
+            .marq div {
+                display: inline-block;
+                animation: m 55s linear infinite;
+            }
+            @keyframes m {
+                to {
+                    transform: translateX(-50%);
+                }
+            }
+            .marq span {
+                margin: 0 18px;
+                opacity: 0.92;
+            }
+            section {
+                padding: 80px 0;
+            }
+            .head {
+                text-align: center;
+                margin-bottom: 46px;
+            }
+            .head .script {
+                font-size: 38px;
+                display: block;
+                line-height: 1;
+            }
+            .head h2 {
+                font-size: clamp(28px, 4.5vw, 40px);
+                letter-spacing: -0.02em;
+                margin: 4px 0 8px;
+            }
+            .head p {
+                color: var(--mut);
+                margin: 0 auto;
+                max-width: 500px;
+                font-size: 16px;
+            }
+            .grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+                gap: 20px;
+            }
+            .card {
+                background: var(--card);
+                border: 1px solid var(--line);
+                border-radius: 18px;
+                padding: 28px;
+                transition: 0.25s;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+            .card:hover {
+                transform: translateY(-4px);
+                border-color: var(--blue);
+                box-shadow: 0 16px 36px -18px var(--blue);
+            }
+            .card-top {
+                margin-bottom: 24px;
+            }
+            .ico {
+                width: 44px;
+                height: 44px;
+                border-radius: 12px;
+                background: var(--soft);
+                color: var(--blue);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                margin-bottom: 18px;
+                flex-shrink: 0;
+            }
+            .badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 4px 10px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 600;
+                margin-bottom: 14px;
+            }
+            .badge.live {
+                background: var(--badge-live-bg);
+                color: var(--badge-live);
+                border: 1px solid var(--badge-live);
+            }
+            .badge.up {
+                background: var(--badge-up-bg);
+                color: var(--badge-up);
+                border: 1px solid var(--badge-up);
+            }
+            .badge-dot {
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background: currentColor;
+            }
+            .card h3 {
+                margin: 0 0 8px;
+                font-size: 22px;
+                letter-spacing: -0.01em;
+            }
+            .card p {
+                margin: 0 0 16px;
+                color: var(--mut);
+                font-size: 15px;
+                line-height: 1.55;
+            }
+            .card-links {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                padding-top: 16px;
+                border-top: 1px solid var(--line);
+            }
+            .card-link-item {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 13px;
+                color: var(--blue);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background: var(--soft);
+                padding: 8px 12px;
+                border-radius: 8px;
+                transition: 0.2s;
+            }
+            .card-link-item:hover {
+                background: color-mix(in srgb, var(--blue) 12%, transparent);
+            }
+            .alt {
+                background: var(--soft);
+            }
+            .split {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 36px;
+                align-items: center;
+            }
+            @media (max-width: 780px) {
+                .split {
+                    grid-template-columns: 1fr;
+                }
+                nav .links {
+                    display: none;
+                }
+            }
+            .split h2 {
+                font-size: clamp(28px, 4vw, 38px);
+                letter-spacing: -0.02em;
+                margin: 0 0 14px;
+            }
+            .split p {
+                color: var(--mut);
+                font-size: 16px;
+            }
+            .code {
+                background: var(--code);
+                color: var(--codeink);
+                border-radius: 18px;
+                padding: 22px;
+                font:
+                    400 13px/1.7 "JetBrains Mono",
+                    monospace;
+                overflow-x: auto;
+                box-shadow: 0 24px 50px -24px #000;
+            }
+            .code i {
+                font-style: normal;
+                color: #7fb4ee;
+            }
+            .code u {
+                text-decoration: none;
+                color: #a8d8a0;
+            }
+            .code s {
+                text-decoration: none;
+                color: #7d93ad;
+            }
+            .dots {
+                display: flex;
+                gap: 6px;
+                margin-bottom: 14px;
+            }
+            .dots b {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: #3b5272;
+            }
+            .features-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                gap: 16px;
+            }
+            .feat-card {
+                background: var(--card);
+                border: 1px solid var(--line);
+                border-radius: 16px;
+                padding: 22px;
+                transition: 0.2s;
+            }
+            .feat-card:hover {
+                border-color: var(--blue);
+                transform: translateY(-2px);
+            }
+            .feat-card h4 {
+                margin: 0 0 6px;
+                font-size: 17px;
+            }
+            .feat-card p {
+                margin: 0;
+                color: var(--mut);
+                font-size: 14px;
+            }
+            .final {
+                text-align: center;
+                padding: 90px 0;
+            }
+            .final .script {
+                font-size: clamp(40px, 7vw, 64px);
+                display: block;
+                line-height: 1.1;
+            }
+            footer {
+                border-top: 1px solid var(--line);
+                padding: 30px 0;
+                color: var(--mut);
+                font-size: 14px;
+                text-align: center;
+            }
+            footer .footer-links {
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+                margin-bottom: 12px;
+                flex-wrap: wrap;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 13px;
+            }
+            footer a {
+                color: var(--blue);
+            }
+            footer a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrap">
+            <nav>
+                <a class="brand" href="#">
+                    <img src="images/logo.png" alt="ourcrepe logo" />
+                    <span>ourcrepe</span>
+                </a>
+                <div class="links">
+                    <a href="#products">Products</a>
+                    <a href="https://quickrunner.ourcrepe.live/" target="_blank" rel="noopener noreferrer">QuickRunner</a>
+                    <a href="https://quickeditor.ourcrepe.live" target="_blank" rel="noopener noreferrer">QuickEditor</a>
+                    <button id="themeToggle" class="theme-btn" aria-label="Toggle theme">
+                        <i id="themeIcon" class="fa-solid fa-moon"></i> Theme
+                    </button>
+                </div>
+            </nav>
+
+            <header class="hero">
+                <img class="logo" src="images/logo.png" alt="ourcrepe logo" />
+                <span class="script">Simple, fast, developer-first</span>
+                <h1>Crafted tools for <em>coders</em><br />who love speed.</h1>
+                <p class="lead">
+                    Minimalist, distraction-free utilities built for daily development and competitive programming.
+                </p>
+                <div class="cta">
+                    <a class="btn p" href="https://quickrunner.ourcrepe.live/" target="_blank" rel="noopener noreferrer">
+                        <span>Launch QuickRunner</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 13px;"></i>
+                    </a>
+                    <a class="btn s" href="https://quickeditor.ourcrepe.live" target="_blank" rel="noopener noreferrer">
+                        <span>Explore QuickEditor (AI)</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 13px;"></i>
+                    </a>
+                </div>
+                <p class="keys">Zero bloat. Instant execution. Pure focus.</p>
+            </header>
+        </div>
+
+        <!-- Marquee Ticker -->
+        <div class="marq"><div id="m"></div></div>
+
+        <!-- Products Section -->
+        <section id="products">
+            <div class="wrap">
+                <div class="head">
+                    <span class="script">Our Suite</span>
+                    <h2>Products by ourcrepe</h2>
+                    <p>Designed to save your keystrokes, eliminate delays, and help you code without friction.</p>
+                </div>
+
+                <div class="grid">
+                    <!-- Product 1: QuickRunner -->
+                    <div class="card">
+                        <div class="card-top">
+                            <span class="badge live"><span class="badge-dot"></span> Live Now</span>
+                            <div class="ico"><i class="fa-solid fa-play"></i></div>
+                            <h3>QuickRunner</h3>
+                            <p>
+                                All-in-one code runner for VS Code and terminal. Run active files, selections, or custom commands across 60+ programming languages with zero setup ceremony.
+                            </p>
+                        </div>
+                        <div class="card-links">
+                            <a class="card-link-item" href="https://quickrunner.ourcrepe.live/" target="_blank" rel="noopener noreferrer">
+                                <span>quickrunner.ourcrepe.live</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 11px;"></i>
+                            </a>
+                            <a class="btn p" style="margin-top: 6px; justify-content: center;" href="https://quickrunner.ourcrepe.live/" target="_blank" rel="noopener noreferrer">
+                                Open QuickRunner <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px; margin-left: 4px;"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Product 2: QuickEditor -->
+                    <div class="card">
+                        <div class="card-top">
+                            <span class="badge up"><span class="badge-dot"></span> Upcoming • AI Powered</span>
+                            <div class="ico"><i class="fa-solid fa-code"></i></div>
+                            <h3>QuickEditor</h3>
+                            <p>
+                                An AI-powered code editor engineered specifically for competitive coders. Built-in multi-testcase runner, algorithmic hints, stress tester against brute force, and fast I/O contest templates.
+                            </p>
+                        </div>
+                        <div class="card-links">
+                            <a class="card-link-item" href="https://quickeditor.ourcrepe.live" target="_blank" rel="noopener noreferrer">
+                                <span>quickeditor.ourcrepe.live</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 11px;"></i>
+                            </a>
+                            <a class="btn p" style="margin-top: 6px; justify-content: center;" href="https://quickeditor.ourcrepe.live" target="_blank" rel="noopener noreferrer">
+                                Visit QuickEditor <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px; margin-left: 4px;"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Split Code Preview Section -->
+        <section id="editor-preview" class="alt">
+            <div class="wrap split">
+                <div>
+                    <span class="script" style="font-size: 34px">Tailored for Contests</span>
+                    <h2>Competitive coding, <code style="color: var(--blue)">supercharged</code></h2>
+                    <p>
+                        <strong>QuickEditor</strong> combines lightning-fast local execution with an AI contest co-pilot that catches edge cases before you hit submit.
+                    </p>
+                    <p>
+                        Never fail on large constraints or hidden test cases again. Generate counterexamples with a single keystroke.
+                    </p>
+                    <div style="margin-top: 24px;">
+                        <a class="btn p" href="https://quickeditor.ourcrepe.live" target="_blank" rel="noopener noreferrer">
+                            Visit quickeditor.ourcrepe.live <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 12px; margin-left: 4px;"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="code">
+                    <div class="dots"><b></b><b></b><b></b></div>
+                    <s>// quickeditor — competitive programming assistant</s><br />
+                    <i>#include</i> <u>&lt;bits/stdc++.h&gt;</u><br />
+                    <b>using namespace</b> std;<br /><br />
+                    <s>// AI: Verified constraints (N &le; 2e5) &bull; O(N log N)</s><br />
+                    <s>// Status: 100/100 Stress-tests passed (0.003s)</s><br />
+                    <b>int</b> main() {<br />
+                    &nbsp;&nbsp;cin.tie(NULL);<br />
+                    &nbsp;&nbsp;ios_base::sync_with_stdio(<b>false</b>);<br />
+                    &nbsp;&nbsp;<i>/* solve contest problem */</i><br />
+                    &nbsp;&nbsp;<b>return</b> 0;<br />
+                    }
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Grid -->
+        <section id="features">
+            <div class="wrap">
+                <div class="head">
+                    <span class="script">Why ourcrepe</span>
+                    <h2>Simple, yet powerful</h2>
+                    <p>Built with the exact same philosophy that powers QuickRunner.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feat-card">
+                        <div class="ico"><i class="fa-solid fa-bolt-lightning"></i></div>
+                        <h4>Instant Execution</h4>
+                        <p>No waiting for spinners or heavy frameworks. Code executes with sub-millisecond local latency.</p>
+                    </div>
+                    <div class="feat-card">
+                        <div class="ico"><i class="fa-solid fa-brain"></i></div>
+                        <h4>AI Edge-Case Detection</h4>
+                        <p>Intelligent test case generators create tricky counterexamples to safeguard your submissions.</p>
+                    </div>
+                    <div class="feat-card">
+                        <div class="ico"><i class="fa-solid fa-keyboard"></i></div>
+                        <h4>Keyboard First</h4>
+                        <p>Keep your hands on the home row. Every action is mapped to quick, natural key bindings.</p>
+                    </div>
+                    <div class="feat-card">
+                        <div class="ico"><i class="fa-solid fa-feather-pointed"></i></div>
+                        <h4>Clean &amp; Minimal</h4>
+                        <p>No telemetry bloat, no distracting popups. Just pure tools designed for deep focus.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="alt final">
+            <div class="wrap">
+                <span class="script">Less waiting, more coding.</span>
+                <h2 style="font-size: clamp(24px, 4vw, 36px); margin: 8px 0 26px">Start using ourcrepe tools today.</h2>
+                <div class="cta">
+                    <a class="btn p" href="https://quickrunner.ourcrepe.live/" target="_blank" rel="noopener noreferrer">
+                        Go to QuickRunner <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 13px; margin-left: 4px;"></i>
+                    </a>
+                    <a class="btn s" href="https://quickeditor.ourcrepe.live" target="_blank" rel="noopener noreferrer">
+                        Go to QuickEditor (AI) <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 13px; margin-left: 4px;"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="wrap">
+                <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 14px; font-weight: 600; color: var(--ink);">
+                    <img src="images/logo.png" style="width: 22px; height: 22px; object-fit: contain;" alt="ourcrepe" />
+                    <span>ourcrepe</span>
+                </div>
+                <div class="footer-links">
+                    <a href="https://quickrunner.ourcrepe.live/" target="_blank" rel="noopener noreferrer">quickrunner.ourcrepe.live</a>
+                    <span>·</span>
+                    <a href="https://quickeditor.ourcrepe.live" target="_blank" rel="noopener noreferrer">quickeditor.ourcrepe.live</a>
+                </div>
+                <div>
+                    &copy; <span id="year">2026</span> ourcrepe. Built for developers &amp; competitive coders.
+                </div>
+            </div>
+        </footer>
+
+        <script>
+            // Dynamic year
+            document.getElementById("year").textContent = new Date().getFullYear();
+
+            // Language & Feature Ticker
+            var items = [
+                "QuickRunner",
+                "QuickEditor (AI)",
+                "C++",
+                "Python",
+                "Java",
+                "Rust",
+                "Go",
+                "TypeScript",
+                "Competitive Coding",
+                "Stress-Testing",
+                "Fast I/O",
+                "Edge-Case Generator",
+                "Zero Setup",
+                "VS Code Extension",
+                "Sub-millisecond Runner"
+            ];
+            var tickerHtml = items
+                .map(function (x) {
+                    return "<span>" + x + "</span>";
+                })
+                .join("");
+            document.getElementById("m").innerHTML = tickerHtml + tickerHtml;
+
+            // Theme toggle
+            var toggleBtn = document.getElementById("themeToggle");
+            var themeIcon = document.getElementById("themeIcon");
+
+            function getPreferredTheme() {
+                var stored = localStorage.getItem("ourcrepe_theme");
+                if (stored) return stored;
+                return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+            }
+
+            function applyTheme(theme) {
+                document.documentElement.setAttribute("data-theme", theme);
+                if (themeIcon) {
+                    themeIcon.className = theme === "dark" ? "fa-solid fa-sun" : "fa-solid fa-moon";
+                }
+            }
+
+            var currentTheme = getPreferredTheme();
+            applyTheme(currentTheme);
+
+            if (toggleBtn) {
+                toggleBtn.addEventListener("click", function () {
+                    var current = document.documentElement.getAttribute("data-theme") || "light";
+                    var next = current === "dark" ? "light" : "dark";
+                    localStorage.setItem("ourcrepe_theme", next);
+                    applyTheme(next);
+                });
+            }
+        </script>
+    </body>
+</html>
