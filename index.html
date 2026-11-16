@@ -512,20 +512,44 @@
                 display: block;
                 line-height: 1.1;
             }
+            /* Structured Multi-Column Footer */
             footer {
                 border-top: 1px solid var(--line);
-                padding: 44px 0 38px;
+                padding: 60px 0 36px;
+                background: var(--bg);
                 color: var(--mut);
                 font-size: 14px;
-                text-align: center;
-                background: var(--bg);
+            }
+            .footer-grid {
+                display: grid;
+                grid-template-columns: 2fr 1fr 1fr 1fr;
+                gap: 40px;
+                margin-bottom: 44px;
+            }
+            @media (max-width: 860px) {
+                .footer-grid {
+                    grid-template-columns: 1fr 1fr;
+                    gap: 32px;
+                }
+                .footer-col.brand-col {
+                    grid-column: span 2;
+                }
+            }
+            @media (max-width: 520px) {
+                .footer-grid {
+                    grid-template-columns: 1fr;
+                    gap: 28px;
+                }
+                .footer-col.brand-col {
+                    grid-column: span 1;
+                }
             }
             .footer-brand {
                 display: inline-flex;
                 align-items: center;
                 gap: 10px;
                 font-weight: 700;
-                font-size: 18px;
+                font-size: 19px;
                 color: var(--ink);
                 margin-bottom: 12px;
                 text-decoration: none;
@@ -536,39 +560,216 @@
                 opacity: 0.85;
             }
             .footer-brand img {
-                width: 24px;
-                height: 24px;
+                width: 26px;
+                height: 26px;
                 object-fit: contain;
                 display: block;
             }
-            .footer-links {
+            .footer-desc {
+                margin: 0 0 16px;
+                color: var(--mut);
+                font-size: 14px;
+                line-height: 1.6;
+                max-width: 320px;
+            }
+            .footer-status {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 12px;
+                font-family: "JetBrains Mono", monospace;
+                padding: 5px 12px;
+                background: var(--soft);
+                border: 1px solid var(--line);
+                border-radius: 20px;
+                color: var(--ink);
+            }
+            .status-dot {
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background: #10b981;
+                box-shadow: 0 0 8px #10b98180;
+            }
+            .footer-col h4 {
+                margin: 0 0 16px;
+                color: var(--ink);
+                font-size: 13px;
+                font-weight: 600;
+                letter-spacing: 0.04em;
+                text-transform: uppercase;
+                font-family: "JetBrains Mono", monospace;
+            }
+            .footer-col ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .footer-col ul li a {
+                color: var(--mut);
+                text-decoration: none;
+                transition: color 0.2s;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 14px;
+                cursor: pointer;
+            }
+            .footer-col ul li a i {
+                font-size: 11px;
+                opacity: 0.7;
+            }
+            .footer-col ul li a:hover {
+                color: var(--blue);
+            }
+            .footer-bottom {
+                border-top: 1px solid var(--line);
+                padding-top: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 14px;
+                font-size: 13px;
+                color: var(--mut);
+            }
+            .footer-bottom a {
+                color: var(--mut);
+                text-decoration: none;
+                transition: color 0.2s;
+            }
+            .footer-bottom a:hover {
+                color: var(--blue);
+            }
+
+            /* Modal System */
+            .modal-backdrop {
+                position: fixed;
+                inset: 0;
+                background: rgba(10, 22, 38, 0.75);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                z-index: 1000;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                gap: 12px;
-                margin-bottom: 12px;
-                flex-wrap: wrap;
-                font-family: "JetBrains Mono", monospace;
-                font-size: 13px;
+                padding: 20px;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.25s ease;
             }
-            .footer-links a {
+            .modal-backdrop.active {
+                opacity: 1;
+                pointer-events: auto;
+            }
+            .modal-box {
+                background: var(--card);
+                border: 1px solid var(--line);
+                border-radius: 18px;
+                max-width: 600px;
+                width: 100%;
+                max-height: 85vh;
+                overflow-y: auto;
+                padding: 32px;
+                box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.45);
+                position: relative;
+                transform: translateY(12px) scale(0.98);
+                transition: transform 0.25s ease;
+            }
+            .modal-backdrop.active .modal-box {
+                transform: translateY(0) scale(1);
+            }
+            .modal-close {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                background: var(--soft);
+                border: 1px solid var(--line);
+                color: var(--ink);
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: 0.2s;
+                font-size: 14px;
+            }
+            .modal-close:hover {
+                border-color: var(--blue);
                 color: var(--blue);
-                text-decoration: none;
-                transition: color 0.2s, opacity 0.2s;
             }
-            .footer-links a:hover {
-                text-decoration: underline;
-                color: var(--blue-d);
+            .modal-box h3 {
+                margin: 0 0 6px;
+                font-size: 22px;
+                color: var(--ink);
+                letter-spacing: -0.01em;
             }
-            .footer-links .sep {
-                color: var(--mut);
-                opacity: 0.45;
-                user-select: none;
-            }
-            .footer-copy {
+            .modal-box .modal-subtitle {
                 color: var(--mut);
                 font-size: 13px;
-                line-height: 1.6;
+                margin-bottom: 20px;
+                font-family: "JetBrains Mono", monospace;
+            }
+            .modal-body {
+                color: var(--ink);
+                font-size: 14px;
+                line-height: 1.65;
+            }
+            .modal-body h4 {
+                margin: 18px 0 6px;
+                color: var(--ink);
+                font-size: 15px;
+            }
+            .modal-body p {
+                margin: 0 0 12px;
+                color: var(--mut);
+            }
+            .modal-body ul {
+                margin: 0 0 14px 20px;
+                color: var(--mut);
+            }
+            .modal-body li {
+                margin-bottom: 5px;
+            }
+            .contact-form {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                margin-top: 14px;
+            }
+            .contact-form input, .contact-form textarea {
+                width: 100%;
+                background: var(--soft);
+                border: 1px solid var(--line);
+                color: var(--ink);
+                border-radius: 8px;
+                padding: 10px 14px;
+                font-family: inherit;
+                font-size: 14px;
+                outline: none;
+                transition: border-color 0.2s;
+            }
+            .contact-form input:focus, .contact-form textarea:focus {
+                border-color: var(--blue);
+            }
+            .contact-btn {
+                background: var(--blue);
+                color: #fff;
+                border: none;
+                padding: 11px 20px;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: background 0.2s;
+                font-size: 14px;
+            }
+            .contact-btn:hover {
+                background: var(--blue-d);
             }
         </style>
     </head>
@@ -755,20 +956,239 @@
         <!-- Footer -->
         <footer>
             <div class="wrap">
-                <a class="footer-brand" href="#">
-                    <img src="images/logo.png" alt="ourcrepe" />
-                    <span>ourcrepe</span>
-                </a>
-                <div class="footer-links">
-                    <a href="https://quickrunner.ourcrepe.live/" target="_blank" rel="noopener noreferrer">quickrunner.ourcrepe.live</a>
-                    <span class="sep">·</span>
-                    <a href="https://quickeditor.ourcrepe.live/" target="_blank" rel="noopener noreferrer">quickeditor.ourcrepe.live</a>
+                <div class="footer-grid">
+                    <!-- Brand Column -->
+                    <div class="footer-col brand-col">
+                        <a class="footer-brand" href="#">
+                            <img src="images/logo.png" alt="ourcrepe" />
+                            <span>ourcrepe</span>
+                        </a>
+                        <p class="footer-desc">
+                            High-performance developer tooling and contest-ready code editors built for extreme focus and speed.
+                        </p>
+                        <div class="footer-status">
+                            <span class="status-dot"></span> All systems operational
+                        </div>
+                    </div>
+
+                    <!-- Products Column -->
+                    <div class="footer-col">
+                        <h4>Products</h4>
+                        <ul>
+                            <li>
+                                <a href="https://quickrunner.ourcrepe.live/" target="_blank" rel="noopener noreferrer">
+                                    QuickRunner <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://quickeditor.ourcrepe.live/" target="_blank" rel="noopener noreferrer">
+                                    QuickEditor (AI) <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/navneetguptacse/quickrunner" target="_blank" rel="noopener noreferrer">
+                                    GitHub Source <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://open-vsx.org/extension/quickrunner/quickrunner" target="_blank" rel="noopener noreferrer">
+                                    Open VSX <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Support Column -->
+                    <div class="footer-col">
+                        <h4>Help &amp; Support</h4>
+                        <ul>
+                            <li><a href="javascript:void(0)" onclick="openModal('supportModal')">Help Center</a></li>
+                            <li><a href="javascript:void(0)" onclick="openModal('faqModal')">FAQs</a></li>
+                            <li><a href="javascript:void(0)" onclick="openModal('contactModal')">Contact Us</a></li>
+                            <li>
+                                <a href="https://github.com/navneetguptacse/quickrunner/issues" target="_blank" rel="noopener noreferrer">
+                                    Report an Issue <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Legal Column -->
+                    <div class="footer-col">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="javascript:void(0)" onclick="openModal('privacyModal')">Privacy Policy</a></li>
+                            <li><a href="javascript:void(0)" onclick="openModal('termsModal')">Terms of Service</a></li>
+                            <li><a href="javascript:void(0)" onclick="openModal('licenseModal')">MIT License</a></li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="footer-copy">
-                    &copy; <span id="year">2026</span> ourcrepe. Built for developers &amp; competitive coders.
+
+                <div class="footer-bottom">
+                    <div class="footer-copy">
+                        &copy; <span id="year">2026</span> ourcrepe. Built for developers &amp; competitive coders.
+                    </div>
+                    <div>
+                        <a href="#" style="display: inline-flex; align-items: center; gap: 4px;">
+                            Back to top <i class="fa-solid fa-arrow-up" style="font-size: 11px;"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </footer>
+
+        <!-- Modal: Privacy Policy -->
+        <div id="privacyModal" class="modal-backdrop">
+            <div class="modal-box">
+                <button class="modal-close" onclick="closeModal('privacyModal')" aria-label="Close modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <h3>Privacy Policy</h3>
+                <div class="modal-subtitle">Effective Date: January 2026 &bull; ourcrepe</div>
+                <div class="modal-body">
+                    <p>At <strong>ourcrepe</strong>, we believe developer tools should respect user privacy by default. We minimize data collection and prioritize local execution.</p>
+                    
+                    <h4>1. Zero Code Telemetry</h4>
+                    <p>When you run code via <strong>QuickRunner</strong> or write algorithms in <strong>QuickEditor</strong>, your code is executed strictly in your local environment. We do not harvest, store, or transmit your proprietary source code to external tracking servers.</p>
+                    
+                    <h4>2. Local Storage</h4>
+                    <p>We use your browser's local storage solely to remember user-chosen preferences (such as light/dark mode selection). This data never leaves your device.</p>
+                    
+                    <h4>3. Analytics &amp; Cookies</h4>
+                    <p>We do not use third-party tracking or cross-site advertising cookies. Any minimal server telemetry collected is purely operational (e.g. server uptime and load diagnostics).</p>
+                    
+                    <h4>4. Contact</h4>
+                    <p>If you have questions regarding our privacy practices, reach us anytime at <a href="mailto:privacy@ourcrepe.live" style="color: var(--blue);">privacy@ourcrepe.live</a>.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: Terms of Service -->
+        <div id="termsModal" class="modal-backdrop">
+            <div class="modal-box">
+                <button class="modal-close" onclick="closeModal('termsModal')" aria-label="Close modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <h3>Terms of Service</h3>
+                <div class="modal-subtitle">Last Updated: 2026 &bull; ourcrepe</div>
+                <div class="modal-body">
+                    <p>By accessing or utilizing our tools (including QuickRunner and QuickEditor), you agree to these Terms of Service.</p>
+                    
+                    <h4>1. License &amp; Usage</h4>
+                    <p>Core open-source utilities are distributed under the MIT License. You are permitted to use, modify, and distribute the open-source software according to license provisions.</p>
+                    
+                    <h4>2. Fair &amp; Ethical Use</h4>
+                    <p>You agree not to use ourcrepe services to execute malicious code, disrupt contest platforms, bypass server rate-limits, or engage in automated denial-of-service activities.</p>
+                    
+                    <h4>3. Disclaimer of Warranty</h4>
+                    <p>The software is provided "as is", without warranty of any kind, express or implied. In no event shall the authors or ourcrepe be liable for any claim, damages, or liabilities arising from usage.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: Help & Support -->
+        <div id="supportModal" class="modal-backdrop">
+            <div class="modal-box">
+                <button class="modal-close" onclick="closeModal('supportModal')" aria-label="Close modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <h3>Help &amp; Support Center</h3>
+                <div class="modal-subtitle">Guides &bull; Troubleshooting &bull; Documentation</div>
+                <div class="modal-body">
+                    <h4>QuickRunner Troubleshooting</h4>
+                    <ul>
+                        <li><strong>Shortcuts:</strong> Press <code>Ctrl + Alt + N</code> to run the active file or selected snippet. Stop anytime with <code>Ctrl + Alt + M</code>.</li>
+                        <li><strong>Custom Compilers:</strong> Configure your runtimes in <code>settings.json</code> under the <code>quickrunner.executorMap</code> namespace.</li>
+                        <li><strong>Terminal REPL:</strong> Toggle <code>quickrunner.runInTerminal</code> to switch between VS Code Output channel and integrated terminal.</li>
+                    </ul>
+
+                    <h4>QuickEditor Assistance</h4>
+                    <ul>
+                        <li><strong>Early Access:</strong> Request preview invites by clicking "Contact Us" or submitting the early access form.</li>
+                        <li><strong>Platform Integrations:</strong> Direct contest parsing supports Codeforces, LeetCode, and AtCoder contest formats.</li>
+                    </ul>
+
+                    <h4>Direct Support</h4>
+                    <p>Need dedicated technical help? Email our developer team directly at <a href="mailto:support@ourcrepe.live" style="color: var(--blue); font-weight: 600;">support@ourcrepe.live</a>.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: FAQs -->
+        <div id="faqModal" class="modal-backdrop">
+            <div class="modal-box">
+                <button class="modal-close" onclick="closeModal('faqModal')" aria-label="Close modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <h3>Frequently Asked Questions</h3>
+                <div class="modal-subtitle">Common Questions &amp; Answers</div>
+                <div class="modal-body">
+                    <h4>Is QuickRunner free to use?</h4>
+                    <p>Yes! QuickRunner is completely free and open-source under the MIT license. You can install it directly from Open VSX or the VS Code Marketplace.</p>
+
+                    <h4>What makes QuickEditor different from general AI editors?</h4>
+                    <p>General AI tools autocomplete standard web boilerplate. QuickEditor is trained strictly on algorithmic data structures, edge-case generation, and competitive programming constraints (time and memory limits).</p>
+
+                    <h4>Can I run custom commands in QuickRunner?</h4>
+                    <p>Yes, press <code>Ctrl + Alt + K</code> or define custom commands in your VS Code settings to run any shell script, makefile, or custom binary.</p>
+
+                    <h4>How do I report bugs or suggest features?</h4>
+                    <p>You can open an issue directly on our <a href="https://github.com/navneetguptacse/quickrunner/issues" target="_blank" rel="noopener noreferrer" style="color: var(--blue);">GitHub repository</a> or contact our team via email.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: Contact Us -->
+        <div id="contactModal" class="modal-backdrop">
+            <div class="modal-box">
+                <button class="modal-close" onclick="closeModal('contactModal')" aria-label="Close modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <h3>Get in Touch</h3>
+                <div class="modal-subtitle">We would love to hear from you &bull; ourcrepe</div>
+                <div class="modal-body">
+                    <p>Whether you have a feature suggestion, partnership inquiry, or technical question, feel free to reach out:</p>
+                    
+                    <div style="background: var(--soft); padding: 14px 18px; border-radius: 12px; border: 1px solid var(--line); margin-bottom: 18px;">
+                        <div style="font-size: 12px; color: var(--mut); margin-bottom: 4px; font-family: 'JetBrains Mono', monospace;">Email Support</div>
+                        <a href="mailto:support@ourcrepe.live" style="font-size: 16px; font-weight: 600; color: var(--blue); text-decoration: none;">
+                            support@ourcrepe.live <i class="fa-solid fa-envelope" style="font-size: 13px; margin-left: 4px;"></i>
+                        </a>
+                    </div>
+
+                    <form class="contact-form" onsubmit="handleContactSubmit(event)">
+                        <input type="text" id="contactName" placeholder="Your Name" required />
+                        <input type="email" id="contactEmail" placeholder="Your Email Address" required />
+                        <textarea id="contactMessage" rows="4" placeholder="How can we help you?" required></textarea>
+                        <button type="submit" class="contact-btn">Send Message</button>
+                        <div id="contactSuccess" style="display: none; padding: 10px; background: #10b98120; border: 1px solid #10b98150; color: #10b981; border-radius: 8px; font-size: 13px; text-align: center; margin-top: 6px;">
+                            Message received! We will reply to your email shortly.
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: MIT License -->
+        <div id="licenseModal" class="modal-backdrop">
+            <div class="modal-box">
+                <button class="modal-close" onclick="closeModal('licenseModal')" aria-label="Close modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <h3>MIT License</h3>
+                <div class="modal-subtitle">Open Source Software &bull; ourcrepe</div>
+                <div class="modal-body">
+                    <pre style="background: var(--code); color: var(--codeink); padding: 18px; border-radius: 12px; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.6; overflow-x: auto; white-space: pre-wrap;">
+Copyright (c) 2026 ourcrepe
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</pre>
+                </div>
+            </div>
+        </div>
 
         <script>
             // Dynamic year
@@ -826,6 +1246,57 @@
                     localStorage.setItem("ourcrepe_theme", next);
                     applyTheme(next);
                 });
+            }
+
+            // Modal Controls
+            function openModal(modalId) {
+                var modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.classList.add("active");
+                    document.body.style.overflow = "hidden";
+                }
+            }
+
+            function closeModal(modalId) {
+                var modal = document.getElementById(modalId);
+                if (modal) {
+                    modal.classList.remove("active");
+                    document.body.style.overflow = "";
+                }
+            }
+
+            // Close modals when clicking backdrop
+            document.querySelectorAll(".modal-backdrop").forEach(function (backdrop) {
+                backdrop.addEventListener("click", function (e) {
+                    if (e.target === backdrop) {
+                        backdrop.classList.remove("active");
+                        document.body.style.overflow = "";
+                    }
+                });
+            });
+
+            // Close modals with Escape key
+            document.addEventListener("keydown", function (e) {
+                if (e.key === "Escape") {
+                    document.querySelectorAll(".modal-backdrop.active").forEach(function (m) {
+                        m.classList.remove("active");
+                    });
+                    document.body.style.overflow = "";
+                }
+            });
+
+            // Contact Form Submission Handler
+            function handleContactSubmit(e) {
+                e.preventDefault();
+                var successBox = document.getElementById("contactSuccess");
+                if (successBox) {
+                    successBox.style.display = "block";
+                    setTimeout(function () {
+                        closeModal("contactModal");
+                        successBox.style.display = "none";
+                        e.target.reset();
+                    }, 2500);
+                }
             }
         </script>
     </body>
