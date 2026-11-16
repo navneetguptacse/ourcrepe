@@ -514,25 +514,61 @@
             }
             footer {
                 border-top: 1px solid var(--line);
-                padding: 30px 0;
+                padding: 44px 0 38px;
                 color: var(--mut);
                 font-size: 14px;
                 text-align: center;
+                background: var(--bg);
             }
-            footer .footer-links {
+            .footer-brand {
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                font-weight: 700;
+                font-size: 18px;
+                color: var(--ink);
+                margin-bottom: 12px;
+                text-decoration: none;
+                letter-spacing: -0.01em;
+                transition: opacity 0.2s;
+            }
+            .footer-brand:hover {
+                opacity: 0.85;
+            }
+            .footer-brand img {
+                width: 24px;
+                height: 24px;
+                object-fit: contain;
+                display: block;
+            }
+            .footer-links {
                 display: flex;
+                align-items: center;
                 justify-content: center;
-                gap: 20px;
+                gap: 12px;
                 margin-bottom: 12px;
                 flex-wrap: wrap;
                 font-family: "JetBrains Mono", monospace;
                 font-size: 13px;
             }
-            footer a {
+            .footer-links a {
                 color: var(--blue);
+                text-decoration: none;
+                transition: color 0.2s, opacity 0.2s;
             }
-            footer a:hover {
+            .footer-links a:hover {
                 text-decoration: underline;
+                color: var(--blue-d);
+            }
+            .footer-links .sep {
+                color: var(--mut);
+                opacity: 0.45;
+                user-select: none;
+            }
+            .footer-copy {
+                color: var(--mut);
+                font-size: 13px;
+                line-height: 1.6;
             }
         </style>
     </head>
@@ -719,16 +755,16 @@
         <!-- Footer -->
         <footer>
             <div class="wrap">
-                <div style="display: inline-flex; align-items: center; gap: 8px; margin-bottom: 14px; font-weight: 600; color: var(--ink);">
-                    <img src="images/logo.png" style="width: 22px; height: 22px; object-fit: contain;" alt="ourcrepe" />
+                <a class="footer-brand" href="#">
+                    <img src="images/logo.png" alt="ourcrepe" />
                     <span>ourcrepe</span>
-                </div>
+                </a>
                 <div class="footer-links">
                     <a href="https://quickrunner.ourcrepe.live/" target="_blank" rel="noopener noreferrer">quickrunner.ourcrepe.live</a>
-                    <span>·</span>
-                    <a href="https://quickeditor.ourcrepe.live" target="_blank" rel="noopener noreferrer">quickeditor.ourcrepe.live</a>
+                    <span class="sep">·</span>
+                    <a href="https://quickeditor.ourcrepe.live/" target="_blank" rel="noopener noreferrer">quickeditor.ourcrepe.live</a>
                 </div>
-                <div>
+                <div class="footer-copy">
                     &copy; <span id="year">2026</span> ourcrepe. Built for developers &amp; competitive coders.
                 </div>
             </div>
