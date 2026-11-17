@@ -40,20 +40,6 @@ Minimalist, high-performance landing page for the **ourcrepe** developer tooling
 
 ---
 
-## Repository Structure
-
-```text
-ourcrepe/
-├── index.html        # Main landing page
-├── favicon.ico       # Root multi-resolution favicon (16px to 64px)
-├── README.md         # Documentation & product overview
-└── images/
-    ├── logo.png      # Official ourcrepe brand logo (theme recolored)
-    └── logo.ico      # Multi-resolution icon for browser tabs
-```
-
----
-
 ## Local Development & Preview
 
 You can preview the site directly in any browser:
